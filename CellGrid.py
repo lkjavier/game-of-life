@@ -33,7 +33,7 @@ class CellGrid:
         if state == None:
             self.state = [[0 for i in range(0, 20)] for i in range(0, 20)]
             self.size = 20
-            for cell in [[10,10],[10,11],[10,12]]:
+            for cell in [[0,0],[10,10],[10,11],[10,12]]:
                 self.set_cell(cell[0], cell[1])
         else:
             self.state = json.loads(state)
