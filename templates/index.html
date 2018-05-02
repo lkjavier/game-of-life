@@ -16,6 +16,20 @@
                 window.onload = function(){
                     var x = new Vue({
                         el: "#cellgrid",
+                        methods: {
+                            advance: function(current_state){
+                                fetch('http://localhost:5000/advance', {
+                                    method: 'POST',
+                                    headers: {
+                                        'content-type': 'application/json' 
+                                    },
+                                    body: JSON.stringify(current_state)
+                                }).then(
+                                    data => data.json()
+                                ).catch(error => console.error(error)
+                                ).then(response => this.current_state = response)
+                            }
+                        },
                         data: {
                             current_state: {{ state }},
                         } ,
@@ -27,7 +41,7 @@
     </head>
     <body>
     
-    <div id="cellgrid">
+    <div id="cellgrid" v-on:click="advance(current_state)">
         <table>
            <tr v-for="row in current_state">
                 <td v-for="cell in row" v-bind:style="[cell === 0 ? { 'background-color': 'white'} : { 'background-color': 'black'}]"></td>
