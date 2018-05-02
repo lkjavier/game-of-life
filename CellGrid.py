@@ -3,18 +3,15 @@ This is an implementation of Conway's game of life in Python.
 Without any arguments the constructor will create a 20x20 grid with a blinker somewhat in the middle
 
 >>> x = CellGrid()
+>>> x.state[8][11]
+1
+>>> x.state[9][10]
+1
 >>> x.state[10][10]
 1
 >>> x.state[10][11]
 1
 >>> x.state[10][12]
-1
->>> x.advance()
->>> x.state[9][11]
-1
->>> x.state[10][11]
-1
->>> x.state[11][11]
 1
 
 """
@@ -26,14 +23,38 @@ import random
 class CellGrid:
     """
     Class for creating a grid of cells that can be either dead or alive.
-    Default size is 20x20, living cells are represented by 1, non-living cells by 0
-    Expects a square nested array 
+    Constructed wihtout arguments a default configuration is set: 
+    >>> cellgrid = CellGrid()
+    >>> cellgrid.print_state()
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0]
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0]
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    
+
+
     """
     def __init__(self, state = None):
         if state == None:
             self.state = [[0 for i in range(0, 20)] for i in range(0, 20)]
             self.size = 20
-            for cell in [[0,0],[10,10],[10,11],[10,12]]:
+            for cell in [[8,11],[9,10],[10,10],[10,11],[10,12]]:
                 self.set_cell(cell[0], cell[1])
         else:
             self.state = json.loads(state)
@@ -45,15 +66,6 @@ class CellGrid:
         while n < self.size*self.size / 4 :
             self.set_cell(random.randint(0, self.size -1), random.randint(0,self.size -1))
             n += 1
-        
-    def print_n_steps(self, n):
-        count = 0
-        while count < n:
-            self.advance()
-            for i in self.state:
-                print(i)
-            time.sleep(1)
-            count += 1
     
     def print_state(self):
         for i in self.state:
