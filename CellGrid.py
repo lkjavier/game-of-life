@@ -45,9 +45,8 @@ class CellGrid:
         count = 0
         while count < n:
             self.advance()
-            clear_output()
             for i in self.state:
-                display(i)
+                print(i)
             time.sleep(1)
             count += 1
     
