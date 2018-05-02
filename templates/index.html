@@ -22,17 +22,17 @@
                     var x = new Vue({
                         el: "#cellgrid",
                         methods: {
-                            advance: function(current_state){
-                                fetch('http://localhost:5000/advance', {
-                                    method: 'POST',
-                                    headers: {
-                                        'content-type': 'application/json' 
-                                    },
-                                    body: JSON.stringify(current_state)
-                                }).then(
-                                    data => data.json()
-                                ).catch(error => console.error(error)
-                                ).then(response => this.current_state = response)
+                            advance: function(current_state, count){
+                                        fetch('http://localhost:5000/advance', {
+                                            method: 'POST',
+                                            headers: {
+                                                'content-type': 'application/json' 
+                                            },
+                                            body: JSON.stringify(current_state)
+                                        }).then(
+                                            data => data.json()
+                                        ).catch(error => console.error(error)
+                                        ).then(response => this.current_state = response)    
                             },
                             toggle_cell: function(row, cell, value){
                                 console.log(row + ", " + cell );
@@ -60,7 +60,7 @@
             </tr>
         </table>
     </div>
-    <div id="advance_button" class="buttons" v-on:click="advance(current_state)">
+    <div id="advance_button" class="buttons" v-on:click="advance(current_state, 2)">
 
     </div>
     </div>

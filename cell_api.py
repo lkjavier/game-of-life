@@ -16,6 +16,6 @@ def start():
 
 @app.route('/advance', methods=['POST'])
 def advance():
-    grid= CellGrid(request.data)
+    grid = CellGrid(request.data)
     grid.advance()
     return grid.get_json_state()
