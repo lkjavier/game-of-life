@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <style>
+            table, th, td {
+                border: 1px solid black
+            }
+            td {
+                height: 15px;
+                width:  15px
+            }
+        </style>
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script>
+                
+                window.onload = function(){
+                    var x = new Vue({
+                        el: "#cellgrid",
+                        data: {
+                            current_state: {{ state }},
+                        } ,
+                    
+                    });
+                };
+                
+            </script>
+    </head>
+    <body>
+    
+    <div id="cellgrid">
+        <table>
+           <tr v-for="row in current_state">
+               <td v-for="cell in row">
+                
+                   {{ '{{row[cell]}}' }}
+                    
+               </td>
+           </tr>
+        </table>
+    </div>
+    
+    </body>
+</html>
