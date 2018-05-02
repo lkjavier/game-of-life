@@ -3,7 +3,18 @@ This is an implementation of Conway's game of life in Python.
 Without any arguments the constructor will create a 20x20 grid with a blinker somewhat in the middle
 
 >>> x = CellGrid()
+>>> x.state[10][10]
+1
 >>> x.state[10][11]
+1
+>>> x.state[10][12]
+1
+>>> x.advance()
+>>> x.state[9][11]
+1
+>>> x.state[10][11]
+1
+>>> x.state[11][11]
 1
 
 """
