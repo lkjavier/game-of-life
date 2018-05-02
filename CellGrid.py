@@ -27,12 +27,17 @@ class CellGrid:
     """
     Class for creating a grid of cells that can be either dead or alive.
     Default size is 20x20, living cells are represented by 1, non-living cells by 0
+    Expects a square nested array 
     """
-    def __init__(self, size = 20, state = [[10,10], [10,11], [10,12]]):
-        self.state = [[0 for i in range(0, size)] for i in range(0, size)]
-        self.size = size
-        for cell in state:
-            self.set_cell(cell[0], cell[1])   
+    def __init__(self, state = None):
+        if state == None:
+            self.state = [[0 for i in range(0, 20)] for i in range(0, 20)]
+            self.size = 20
+            for cell in [[10,10],[10,11],[10,12]]:
+                self.set_cell(cell[0], cell[1])
+        else:
+            self.state = json.loads(state)
+            self.size = len(self.state) 
         self.new_state = copy.deepcopy(self.state)
         
     def randomize(self):
