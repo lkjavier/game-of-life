@@ -22,7 +22,7 @@
                     var x = new Vue({
                         el: "#cellgrid",
                         methods: {
-                            advance: function(current_state, count){
+                            advance: function(current_state){
                                         fetch('http://localhost:5000/advance', {
                                             method: 'POST',
                                             headers: {
@@ -32,12 +32,21 @@
                                         }).then(
                                             data => data.json()
                                         ).catch(error => console.error(error)
-                                        ).then(response => this.current_state = response)    
+                                        ).then(response => this.current_state = response);
+                                        
                             },
                             toggle_cell: function(row, cell, value){
                                 console.log(row + ", " + cell );
                                 this.current_state[row][cell] = value === 0 ? 1 : 0; 
                                 this.$forceUpdate();
+                            },
+                            advance_n: function(current_state, n, scope = this){
+                                let timerId = setTimeout(function n(){
+                                    scope.advance(current_state); 
+                                    scope.$forceUpdate();
+                                    timerId = setTimeout(n, 2000, scope);
+                                }, 2000);
+                                setTimeout(() => clearInterval(timerId), n*20000);
                             },
 
                         },
@@ -60,9 +69,19 @@
             </tr>
         </table>
     </div>
-    <div id="advance_button" class="buttons" v-on:click="advance(current_state, 2)">
+    <div id="advance_button" class="buttons" v-on:click="advance(current_state)">
 
     </div>
     </div>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+    <script type="text/javascript" charset="utf-8">
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
+        socket.on('connect', function() {
+            socket.emit('Call', {data: 'CallData'});
+        });
+        socket.on('Response', function(data){
+            console.log('Response');
+        });
+</script>
     </body>
 </html>
