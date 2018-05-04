@@ -58,8 +58,9 @@ class CellGrid:
             for cell in [[8,11],[9,10],[10,10],[10,11],[10,12],[10,13]]:
                 self.set_cell(cell[0], cell[1])
         else:
-            self.state = json.loads(state)
-            self.size = len(self.state) 
+            self.state = state
+            self.size = len(self.state)
+            print('Object size:{}'.format(self.size))
         self.new_state = copy.deepcopy(self.state)
         
     def randomize(self):

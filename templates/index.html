@@ -22,6 +22,10 @@
                     window.$v = new Vue({
                         el: "#cellgrid",
                         methods: {
+                            advance_s: function(){
+                                socket.emit('Call', JSON.stringify(this.current_state));
+                                
+                            },
                             advance: function(current_state){
                                         fetch('http://localhost:5000/advance', {
                                             method: 'POST',
@@ -69,7 +73,7 @@
             </tr>
         </table>
     </div>
-    <div id="advance_button" class="buttons" v-on:click="advance(current_state)">
+    <div id="advance_button" class="buttons" v-on:click="advance_s(current_state)">
 
     </div>
     </div>
@@ -77,10 +81,12 @@
     <script type="text/javascript" charset="utf-8">
         var socket = io.connect('http://' + document.domain + ':' + location.port);
         socket.on('connect', function() {
-            socket.emit('Call', {data: 'CallData'});
+            //socket.emit('Call', {data: 'CallData'});
         });
         socket.on('Response', function(data){
-            console.log('Response');
+            $v.current_state = JSON.parse(data);
+            console.log(typeof data);
+
         });
 </script>
     </body>

@@ -24,8 +24,12 @@ def advance():
 
 @socketio.on('Call')
 def handle_message(message):
-    print(json.dumps(message))
-    emit('Response', [['Response']])
+    print("Messagetype: {}, message:{}".format(type(message), message))
+    print(len(json.loads(message)))
+
+    grid = CellGrid(json.loads(message))
+    grid.advance()
+    emit('Response', grid.get_json_state())
     #pass
 
 if __name__ == '__main__':
