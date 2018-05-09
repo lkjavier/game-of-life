@@ -10,7 +10,7 @@ socketio = SocketIO(app)
 @app.route('/', methods=['GET','POST'])
 def start():
     if request.method == 'GET':
-        grid = CellGrid()
+        grid = CellGrid(state = None, size = 30)
     else:
         grid = CellGrid(request.data)
         grid.advance() 
@@ -29,6 +29,13 @@ def handle_message(message):
 
     grid = CellGrid(json.loads(message))
     grid.advance()
+    emit('Response', grid.get_json_state())
+    #pass
+
+@socketio.on('Randomize')
+def handle_message(message):
+    grid = CellGrid(json.loads(message))
+    grid.randomize()
     emit('Response', grid.get_json_state())
     #pass
 

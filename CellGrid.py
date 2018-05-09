@@ -51,10 +51,10 @@ class CellGrid:
 
 
     """
-    def __init__(self, state = None):
+    def __init__(self, state = None, size = 40):
         if state == None:
-            self.state = [[0 for i in range(0, 20)] for i in range(0, 20)]
-            self.size = 20
+            self.state = [[0 for i in range(0, size)] for i in range(0, size)]
+            self.size = size
             for cell in [[8,11],[9,10],[10,10],[10,11],[10,12],[10,13]]:
                 self.set_cell(cell[0], cell[1])
         else:
