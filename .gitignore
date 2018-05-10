@@ -131,3 +131,5 @@ $RECYCLE.BIN/
 
 # End of https://www.gitignore.io/api/code,python,windows
 *.code-workspace
+devops.pptx
+~$devops.pptx
