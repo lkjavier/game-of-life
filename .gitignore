@@ -128,8 +128,7 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-
-# End of https://www.gitignore.io/api/code,python,windows
+# Miscellaneous
 *.code-workspace
-devops.pptx
-~$devops.pptx
+*.pptx
+
