@@ -3,12 +3,12 @@
     <head>
         <style>
             table, th, td {
-                /*border: 1px solid black;*/
+                border: 1px solid black;
                 border-radius: 15px;
                 
             }
             .buttonText {
-                text-align: center
+                display: inline-block
             }
             #cellgrid {
                 transform: rotate(0deg);
@@ -21,6 +21,7 @@
                 background-color: wheat;
                 width: 600px;
                 margin: 0 auto;
+                border-radius: 15px;
 
             }
             td {
@@ -28,18 +29,28 @@
                 width:  15px
             }
             .buttons {
-                width: 150px;
-                height: 50px;
+                width: 145px;
+                height: 25px;
+                text-align: center;
+                padding-top: 5px;
+                
             }
             #advance_button {
                 background-color: green;
             }
+            #startstop_button {
+                background-color: lightgreen;
+            }
             #randomize_button {
                 background-color: turquoise;
             }
-            /*#blinker {
-                background-color: yellow;
-            }*/
+            #clear_button {
+                background-color: blue;
+            }
+            #blinker {
+                width: 100%;
+                height: 15px;
+            }
         </style>
         <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
         <script>
@@ -51,11 +62,20 @@
                     window.$v = new Vue({
                         el: "#cellgrid",
                         methods: {
+                            clear: function() {
+                                this.current_state.forEach(function(x,i){
+                                    x.forEach(function(y, j){
+                                        window.$v.current_state[i][j] = 0;
+                                        window.$v.$forceUpdate();
+                                    });
+                                });
+                            },
                             randomize: function(){
                                 socket.emit('Randomize', JSON.stringify(this.current_state));
                             },
                             advance_s: function(){
-                                socket.emit('Call', {'steps':10});
+                                //socket.emit('Call', {'steps':10});
+                                socket.emit('Call', JSON.stringify(this.current_state));
                             },
                             advance: function(current_state){
                                         fetch('http://localhost:5000/advance', {
@@ -126,17 +146,23 @@
                         v-on:click="toggle_cell(row_index, cell_index, cell)"></td>
                 </tr>
              </table>
-             <div id="advance_button" class="buttons" v-on:click="advance_s()">
-        
-                </div>
+             <button id="startstop_button" class="buttons" v-on:click="advance_switch()">
+                <span class="buttonText">Start/stop</span> 
+             </button>
+             <button id="advance_button" class="buttons" v-on:click="advance_s()">
+                <span class="buttonText"> 1 step </span>  
+              </button>
+             <button id="randomize_button" class="buttons" v-on:click="randomize()">
+                <span class="buttonText">Randomize</span>  
+              </button>
+              <button id="clear_button" class="buttons" v-on:click="clear()">
+                <span class="buttonText">Clear</span>  
+              </button>
+              
                 
                 <div id="blinker" class="buttons" v-bind:style="[flipflop === -1 ? {'background-color':'yellow'} : {'background-color':'red'} ]">
-                
-
                 </div>
-                <div id="randomize_button" class="buttons" v-on:click="randomize()">
-                  <span class="buttonText">?</span>  
-                    </div>
+                
         </div>
        
     </div>
