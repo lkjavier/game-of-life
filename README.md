@@ -10,4 +10,15 @@ Playground for building out some ideas on Cellular Automata
 4. Requirements
 - Flask
 
-  
+## Virtual Environment
+```
+virtualenv -p python3 venv 
+source venv/bin/activate
+pip install -r app/requirements.txt
+```  
+
+## Docker
+```
+docker build -t gameoflife .
+docker run -p 8080:80 gameoflife
+```  

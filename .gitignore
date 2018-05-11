@@ -132,3 +132,8 @@ $RECYCLE.BIN/
 *.code-workspace
 *.pptx
 
+# macosx 
+.DS_Store
+
+# pycharm 
+.idea/
