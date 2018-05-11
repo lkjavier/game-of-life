@@ -20,5 +20,5 @@ pip install -r app/requirements.txt
 ## Docker
 ```
 docker build -t gameoflife .
-docker run -p 8080:80 gameoflife
+docker run -p 80:80 gameoflife
 ```  
