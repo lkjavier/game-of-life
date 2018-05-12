@@ -62,16 +62,47 @@ class Rule:
     param ruleset is a dictionary
     '''
     def __init__(self):
-        self.rules
         pass
 
     def run(self, state, x, y):
         return 0
         
 class ConwayRule(Rule):
+    '''
+        Conway's Rule
+        Determine if a state is dead or alive based on number of living cells within it's
+        direct neighbours.
+        >>> grid = CellGrid(state = [[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]])
+        >>> rule = ConwayRule()
+        >>> rule.run(grid.state, 0,0)
+        0
+        >>> rule.count_neighbours(grid.state, 1, 1)
+        2
+        >>> rule.run(grid.state, 1,1)
+        1
+        >>> rule.run(grid.state, 2,1)
+        0
+        >>> grid.set_cell(3,1)
+        >>> rule.run(grid.state, 2,1)
+        1
+    '''
+    def __init__(self, b = [3], s = [2, 3]):
+        self.b = b
+        self.s = s
 
-    def run(self, state):
-        return 1        
+    def run(self, state, x, y):
+        n = self.count_neighbours(state, x, y)
+        if (state[x][y] == 0) & (n in self.b):
+            # new cell is born
+            return 1
+        if (state[x][y] == 1) & (n in self.s):
+            # existing cell survives
+            return 1
+        # cell is dead otherwise
+        return 0
+
+    def count_neighbours(self, state, x, y):
+        return np.array(state)[max(x-1,0):x+2,max(y-1,0):y+2].sum() - state[x][y]
 
 class GridGame():
     '''
