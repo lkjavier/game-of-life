@@ -2,8 +2,10 @@
 Refactor of CellGrid.py
 '''
 import random
-import importlib
 import numpy as np
+import json
+import eventlet
+from kafka import KafkaProducer
 
 class CellGrid:
     '''
@@ -104,18 +106,43 @@ class ConwayRule(Rule):
     def count_neighbours(self, state, x, y):
         return np.array(state)[max(x-1,0):x+2,max(y-1,0):y+2].sum() - state[x][y]
 
+    def name(self):
+        return "Conway Rule " + str(self.b) + "b/" + str(self.s) + "s"
+
 class GridGame():
     '''
 
     '''
-    def __init__(self, size = 100, ruleName = "Conway"):
+    def __init__(self, size = 100, ruleName = "Conway", stream = False):
         self.cellGrid = CellGrid(size = size)
-        MyRule = getattr(importlib.import_module("module.submodule"), ruleName + "Rule")
-        self.rule = MyRule()
-
-    def start(self):
         self.cellGrid.randomize()
-        #for t in range(1,1000):
-        self.cellGrid.advance(self.rule)
+        self.initial_state = [row[:] for row in self.cellGrid.state]
+        self.time_index = 0
+        # MyRule = getattr(importlib.import_module("app.refactor"), ruleName + "Rule")
+        # self.rule = MyRule()
+        self.rule = ConwayRule()
+        self.stream = stream
+        if self.stream:
+            self.producer = KafkaProducer(bootstrap_servers='0.0.0.0:9092',
+                                     value_serializer=lambda v: json.dumps(v).encode('utf-8'),
+                                          api_version=(0, 10, 1))
 
-    
+    def next(self):
+        self.time_index += 1
+        self.cellGrid.advance(self.rule)
+        if self.stream:
+            self.producer.send("test", {"name": self.name(), "time_step": self.time_index, "state": self.cellGrid.state})
+
+    def name(self):
+        return "GridGame size="+str(self.cellGrid.size())+" "+self.rule.name()
+
+    def start(self, socketio):
+        self.active = True
+        eventlet.spawn(run, self, self.time_index + 50, socketio)
+
+def run(game, max_time, socketio):
+    while game.time_index < max_time:
+        eventlet.sleep(0.1)
+        game.next()
+        socketio.emit('Update', json.dumps(game.cellGrid.state))
+

@@ -105,6 +105,9 @@
                                 $v.timerid = undefined;
                                 }
                             },
+                            start: function(){
+                                socket.emit('start', JSON.stringify(this.current_state));
+                            }
 
                         },
                         computed: {
@@ -158,6 +161,9 @@
               <button id="clear_button" class="buttons" v-on:click="clear()">
                 <span class="buttonText">Clear</span>  
               </button>
+              <button id="start_button" class="buttons" v-on:click="start()">
+                <span class="buttonText">start</span>
+              </button>
                 <div id="blinker" class="buttons" v-bind:style="[flipflop === -1 ? {'background-color':'yellow'} : {'background-color':'red'} ]">
                 </div>
                 
@@ -174,6 +180,10 @@
             $v.current_state = JSON.parse(data);
             $v.flipflop *= -1; 
             console.log(typeof JSON.parsedata)
+        });
+        socket.on('Update', function(data){
+            $v.current_state = JSON.parse(data);
+            console.log("update received:",JSON.parse(data))
         });
 </script>
     </body>
