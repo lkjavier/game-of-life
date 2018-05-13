@@ -1,0 +1,49 @@
+table, th, td {
+    border: 1px solid black;
+    border-radius: 15px;
+    
+}
+.buttonText {
+    display: inline-block
+}
+#cellgrid {
+    transform: rotate(0deg);
+}
+table {
+    background-color:rgba(0, 0, 0, 0);
+    display: inline-block;
+}
+#gridcontainer {
+    background-color: wheat;
+    width: 600px;
+    margin: 0 auto;
+    border-radius: 15px;
+
+}
+td {
+    height: 15px;
+    width:  15px
+}
+.buttons {
+    width: 145px;
+    height: 25px;
+    text-align: center;
+    padding-top: 5px;
+    
+}
+#advance_button {
+    background-color: green;
+}
+#startstop_button {
+    background-color: lightgreen;
+}
+#randomize_button {
+    background-color: turquoise;
+}
+#clear_button {
+    background-color: blue;
+}
+#blinker {
+    width: 100%;
+    height: 15px;
+}
