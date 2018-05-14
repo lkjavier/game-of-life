@@ -27,6 +27,9 @@
             <button id="clear_button" class="buttons" v-on:click="clear()">
                 <span class="buttonText">Clear</span>  
             </button>
+            <button id="start_button" class="buttons" v-on:click="start()">
+                <span class="buttonText">start</span>
+            </button>
             <div id="blinker" class="buttons" v-bind:style="[flipflop === -1 ? {'background-color':'yellow'} : {'background-color':'red'} ]">
             </div>  
         </div>

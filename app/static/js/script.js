@@ -30,6 +30,10 @@ window.onload = function(){
                 //socket.emit('Call', {'steps':10});
                 socket.emit('Call', JSON.stringify(this.current_state));
             },
+            start: function(){
+                //socket.emit('Call', {'steps':10});
+                socket.emit('start', JSON.stringify(this.current_state));
+            },
             advance: function(current_state){
                         fetch('http://localhost:5000/advance', {
                             method: 'POST',
@@ -94,4 +98,8 @@ var socket = io.connect('http://' + document.domain + ':' + location.port);
             $v.current_state = JSON.parse(data);
             $v.flipflop *= -1; 
             console.log(typeof JSON.parsedata)
+        });
+         socket.on('Update', function(data){
+            $v.current_state = JSON.parse(data);
+            console.log(JSON.parse(data))
         });
