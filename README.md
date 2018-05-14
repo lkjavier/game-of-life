@@ -15,13 +15,13 @@ Playground for building out some ideas on Cellular Automata
 virtualenv -p python3 venv 
 source venv/bin/activate
 pip install -r app/requirements.txt
-FLASK_DEBUG=1 FLASK_APP=cell_api.py flask run --host=0.0.0.0
+FLASK_DEBUG=1 flask run --host=0.0.0.0
 http://localhost:5000/
 ```  
 
 ## Docker
 ```
 docker build -t gameoflife .
-docker run -p 80:80 gameoflife
-http://localhost:80/
+docker run -p 5050:5000 gameoflife flask run --host=0.0.0.0
+http://localhost:5050/
 ```  

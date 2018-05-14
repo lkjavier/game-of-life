@@ -1,144 +1,10 @@
 <!DOCTYPE HTML>
 <html lang="en">
     <head>
-        <style>
-            table, th, td {
-                border: 1px solid black;
-                border-radius: 15px;
-                
-            }
-            .buttonText {
-                display: inline-block
-            }
-            #cellgrid {
-                transform: rotate(0deg);
-            }
-            table {
-                background-color:rgba(0, 0, 0, 0);
-                display: inline-block;
-            }
-            #gridcontainer {
-                background-color: wheat;
-                width: 600px;
-                margin: 0 auto;
-                border-radius: 15px;
-
-            }
-            td {
-                height: 15px;
-                width:  15px
-            }
-            .buttons {
-                width: 145px;
-                height: 25px;
-                text-align: center;
-                padding-top: 5px;
-                
-            }
-            #advance_button {
-                background-color: green;
-            }
-            #startstop_button {
-                background-color: lightgreen;
-            }
-            #randomize_button {
-                background-color: turquoise;
-            }
-            #clear_button {
-                background-color: blue;
-            }
-            #blinker {
-                width: 100%;
-                height: 15px;
-            }
-        </style>
-        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-        <script>
-                
-                window.onload = function(){
-                    
-
-
-                    window.$v = new Vue({
-                        el: "#cellgrid",
-                        methods: {
-                            clear: function() {
-                                this.current_state.forEach(function(x,i){
-                                    x.forEach(function(y, j){
-                                        window.$v.current_state[i][j] = 0;
-                                        window.$v.$forceUpdate();
-                                    });
-                                });
-                            },
-                            randomize: function(){
-                                socket.emit('Randomize', JSON.stringify(this.current_state));
-                            },
-                            advance_s: function(){
-                                //socket.emit('Call', {'steps':10});
-                                socket.emit('Call', JSON.stringify(this.current_state));
-                            },
-                            advance: function(current_state){
-                                        fetch('http://localhost:5000/advance', {
-                                            method: 'POST',
-                                            headers: {
-                                                'content-type': 'application/json' 
-                                            },
-                                            body: JSON.stringify(current_state)
-                                        }).then(
-                                            data => data.json()
-                                        ).catch(error => console.error(error)
-                                        ).then(response => this.current_state = response);
-                                        
-                            },
-                            toggle_cell: function(row, cell, value){
-                                console.log(row + ", " + cell );
-                                this.current_state[row][cell] = value === 0 ? 1 : 0; 
-                                this.$forceUpdate();
-                            },
-                            advance_switch: function(){
-                                if ($v.timerid === undefined){
-                                    $v.timerid = setInterval(function(){
-                                        $v.advance_s();
-                                    }, 200);
-                                } else {
-                                clearInterval($v.timerid);
-                                $v.timerid = undefined;
-                                }
-                            },
-                            start: function(){
-                                socket.emit('start', JSON.stringify(this.current_state));
-                            }
-
-                        },
-                        computed: {
-                            cell_style: function(cell){
-                                
-                                return {
-                                    'background-color': cell === 0 ? wheat : black
-                                }
-                            }
-
-                        },
-                        data: {
-                            active_cell: {
-                                'background-color': 'black'
-
-                            },
-                            inactive_cell: {
-                                'background-color': 'wheat'
-                            },
-                            flipflop: -1,
-                            timerid: undefined,
-                            current_state: {{ state }},
-                        },
-                    
-                    });
-
-                };
-
-                
-                
-            </script>
+        <link rel="stylesheet" href="/static/css/style.css">
+        <script type="text/javascript" src="//cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+        <script type="text/javascript" src="/static/js/script.js"></script>
     </head>
     <body> 
     <div id="cellgrid">
@@ -148,43 +14,22 @@
                     <td v-for="(cell, cell_index) in row" v-bind:style="[cell === 0 ? inactive_cell : active_cell]" 
                         v-on:click="toggle_cell(row_index, cell_index, cell)"></td>
                 </tr>
-             </table>
-             <button id="startstop_button" class="buttons" v-on:click="advance_switch()">
+            </table>
+            <button id="startstop_button" class="buttons" v-on:click="advance_switch()">
                 <span class="buttonText">Start/stop</span> 
-             </button>
-             <button id="advance_button" class="buttons" v-on:click="advance_s()">
+            </button>
+            <button id="advance_button" class="buttons" v-on:click="advance_s()">
                 <span class="buttonText"> 1 step </span>  
               </button>
-             <button id="randomize_button" class="buttons" v-on:click="randomize()">
+            <button id="randomize_button" class="buttons" v-on:click="randomize()">
                 <span class="buttonText">Randomize</span>  
-              </button>
-              <button id="clear_button" class="buttons" v-on:click="clear()">
+            </button>
+            <button id="clear_button" class="buttons" v-on:click="clear()">
                 <span class="buttonText">Clear</span>  
-              </button>
-              <button id="start_button" class="buttons" v-on:click="start()">
-                <span class="buttonText">start</span>
-              </button>
-                <div id="blinker" class="buttons" v-bind:style="[flipflop === -1 ? {'background-color':'yellow'} : {'background-color':'red'} ]">
-                </div>
-                
+            </button>
+            <div id="blinker" class="buttons" v-bind:style="[flipflop === -1 ? {'background-color':'yellow'} : {'background-color':'red'} ]">
+            </div>  
         </div>
-       
     </div>
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
-    <script type="text/javascript" charset="utf-8">
-        var socket = io.connect('http://' + document.domain + ':' + location.port);
-        socket.on('connect', function() {
-            //socket.emit('Call', {data: 'CallData'});
-        });
-        socket.on('Response', function(data){
-            $v.current_state = JSON.parse(data);
-            $v.flipflop *= -1; 
-            console.log(typeof JSON.parsedata)
-        });
-        socket.on('Update', function(data){
-            $v.current_state = JSON.parse(data);
-            console.log("update received:",JSON.parse(data))
-        });
-</script>
     </body>
 </html>
