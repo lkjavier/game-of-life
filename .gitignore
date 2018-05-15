@@ -131,6 +131,7 @@ $RECYCLE.BIN/
 # Miscellaneous
 *.code-workspace
 *.pptx
+notes.txt
 
 # macosx 
 .DS_Store
