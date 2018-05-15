@@ -56,7 +56,7 @@ window.onload = function(){
                 if ($v.timerid === undefined){
                     $v.timerid = setInterval(function(){
                         $v.advance_s();
-                    }, 200);
+                    }, $v.timeout);
                 } else {
                 clearInterval($v.timerid);
                 $v.timerid = undefined;
@@ -84,6 +84,7 @@ window.onload = function(){
             flipflop: -1,
             timerid: undefined,
             current_state: [],
+            timeout: 500,
         },
     
     });
