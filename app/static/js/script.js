@@ -48,9 +48,12 @@ window.onload = function(){
                         
             },
             toggle_cell: function(row, cell, value){
-                console.log(row + ", " + cell );
-                this.current_state[row][cell] = value === 0 ? 1 : 0; 
-                this.$forceUpdate();
+                console.log(row + ", " + cell + ' .DepressedKeys: ' + $v.keys_depressed);
+                if($v.keys_depressed !== 0){
+                    this.current_state[row][cell] = value === 0 ? 1 : 0; 
+                    this.$forceUpdate();
+                }
+                
             },
             advance_switch: function(){
                 if ($v.timerid === undefined){
@@ -82,6 +85,7 @@ window.onload = function(){
                 'background-color': 'wheat'
             },
             flipflop: -1,
+            keys_depressed: 0,
             timerid: undefined,
             current_state: [],
             timeout: 500,
@@ -89,6 +93,16 @@ window.onload = function(){
     
     });
     $v.initialize(30);
+    startKeypressChecker(document);
+
+    function startKeypressChecker(document) {
+        document.onkeydown = function () {
+            $v.keys_depressed = 1;
+        };
+        document.onkeyup = function () {
+            $v.keys_depressed = 0;
+        };
+    }
 };
 
 var socket = io.connect('http://' + document.domain + ':' + location.port);
@@ -104,3 +118,5 @@ var socket = io.connect('http://' + document.domain + ':' + location.port);
             $v.current_state = JSON.parse(data);
             console.log(JSON.parse(data))
         });
+
+

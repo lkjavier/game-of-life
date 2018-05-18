@@ -12,7 +12,7 @@
             <table>
                 <tr v-for="(row, row_index) in current_state">
                     <td v-for="(cell, cell_index) in row" v-bind:style="[cell === 0 ? inactive_cell : active_cell]" 
-                        v-on:click="toggle_cell(row_index, cell_index, cell)"></td>
+                        v-on:mouseover="toggle_cell(row_index, cell_index, cell)"></td>
                 </tr>
             </table>
             <button id="startstop_button" class="buttons" v-on:click="advance_switch()">
