@@ -4,7 +4,7 @@ import json
 from CellGrid import CellGrid
 from refactor import GridGame
 
-import logging 
+import logging
 logging.basicConfig(filename='error.log',level=logging.DEBUG)
 
 app = Flask(__name__)
