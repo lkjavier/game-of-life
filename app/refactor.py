@@ -146,3 +146,6 @@ def run(game, max_time, socketio):
         game.next()
         socketio.emit('Update', json.dumps(game.cellGrid.state))
 
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
