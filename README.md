@@ -1,4 +1,4 @@
-# game-of-life
+# game-of-life 
 Playground for building out some ideas on Cellular Automata
 
 1. Game Of Life
