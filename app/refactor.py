@@ -123,7 +123,7 @@ class GridGame():
         self.rule = ConwayRule()
         self.stream = stream
         if self.stream:
-            self.producer = KafkaProducer(bootstrap_servers='0.0.0.0:9092',
+            self.producer = KafkaProducer(bootstrap_servers='kafkacluster:9092',
                                      value_serializer=lambda v: json.dumps(v).encode('utf-8'),
                                           api_version=(0, 10, 1))
 
@@ -131,7 +131,7 @@ class GridGame():
         self.time_index += 1
         self.cellGrid.advance(self.rule)
         if self.stream:
-            self.producer.send("test", {"name": self.name(), "time_step": self.time_index, "state": self.cellGrid.state})
+            self.producer.send("gameoflife", {"name": self.name(), "time_step": self.time_index, "state": self.cellGrid.state})
 
     def name(self):
         return "GridGame size="+str(self.cellGrid.size())+" "+self.rule.name()
